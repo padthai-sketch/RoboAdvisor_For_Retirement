@@ -1,4 +1,4 @@
-# Robo Advisor for Retirement Plans(Assignment)
+# Robo Advisor for Retirement Plans (Assignment)
 
 In this homework assignment, I was asked to create a bot that will recommend an investment portfolio for a retirement plan by accomplish the following main tasks:
 
