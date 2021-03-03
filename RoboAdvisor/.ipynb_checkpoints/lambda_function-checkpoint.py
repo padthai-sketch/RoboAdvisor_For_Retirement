@@ -26,7 +26,6 @@ def build_validation_result(is_valid, violated_slot, message_content):
         "message": {"contentType": "PlainText", "content": message_content},
     }
 
-
 ### Dialog Actions Helper Functions ###
 def get_slots(intent_request):
     """
@@ -50,7 +49,6 @@ def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message)
             "message": message,
         },
     }
-
 
 def delegate(session_attributes, slots):
     """
@@ -78,7 +76,7 @@ def close(session_attributes, fulfillment_state, message):
     }
 
     return response
-
+    
 
 ### Intents Handlers ###
 def recommend_portfolio(intent_request):
@@ -98,51 +96,43 @@ def recommend_portfolio(intent_request):
         # for the first violation detected.
         
         ### YOUR DATA VALIDATION CODE STARTS HERE ###
-           
-        # Validate that the user is less than 65 years old
-        if age > 65:
-            return build_validation_result(
-                False,
-                "age",
-                "The maximum age to use this service is 64,"
-                "Please provide the age that greater than zero and less than 65.",
-            )
+        
+      # Validate that the user is less than 65 years old
+        if age is not None: 
+            age = parse_int(age)
+            if age <= 0:
+                return build_validation_result(
+                    False,
+                    "age",
+                    "Sorry, the age cannot be zero. Please provide the age that greater than zero and less than 65.")
+            elif age >= 65:
+                return build_validation_result(
+                    False,
+                    "age",
+                    "The maximum age to use this service is 64.Please provide the age that is less than 65.")
     
         # Validate the investment amount, it should be >= 5000
         if investment_amount is not None:
-        investment_amount = parse_float(
-            investment_amount
-        )  
-        if investment_amount < 5000:
-            return build_validation_result(
-                False,
-                "investmentAmount",
-                "The minimum investment amount is 5000, "
-                "Please provide the amount that equal to or greater than 5000.",
-            )
-       
-        # A True results is returned if age or amount are valid
-        return build_validation_result(True, None, None)
-        
-         slots = get_slots(intent_request)
-        
-        # Validates user's input using the validate_data function
-        validation_result = validate_data(age, investment_amount, intent_request)      
-        
-        # If the data provided by the user is not valid,
-        # the elicitSlot dialog action is used to re-prompt for the first violation detected.
-        
-        if not validation_result["isValid"]:
-            slots[validation_result["violatedSlot"]] = None  # Cleans invalid slot
-            
-            # Returns an elicitSlot dialog to request new data for the invalid slot
-            return elicit_slot(
-                intent_request["sessionAttributes"],
-                intent_request["currentIntent"]["name"],
-                slots,
-                validation_result["violatedSlot"],
-                validation_result["message"],
-            )
+            investment_amount = parse_int(investment_amount)  
+            if investment_amount < 5000:
+                return build_validation_result(
+                    False,
+                    "investmentAmount",
+                    "The minimum investment amount is 5000. Please provide the amount that equal to or greater than 5000.")
+                return close(
+        intent_request["sessionAttributes"],
+        "Fulfilled",
+        {
+            "contentType": "PlainText",
+            "content": """{} thank you for your information;
+            based on the risk level you defined, my recommendation is to choose an investment portfolio with {}
+            """.format(
+                first_name, initial_recommendation
+            ),
+        },
+    )    
+                # A True results is returned if age or amount are valid
+                #return build_validation_result(True, None, None)
         
         ### YOUR DATA VALIDATION CODE ENDS HERE ###
         
@@ -152,22 +142,24 @@ def recommend_portfolio(intent_request):
         return delegate(output_session_attributes, get_slots(intent_request))
 
     # Get the initial investment recommendation
+    
+    initial_recommendation = get_investment_recommendation(risk_level)
 
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE STARTS HERE ###
     
-        if risk_level == 'none':
-            initial_recommendation = '100% bonds (AGG), 0% equities (SPY)'
-        elif risk_level == 'very low':
-            initial_recommendation = '80% bonds (AGG), 20% equities (SPY)'
-        elif risk_level == 'low':
-            initial_recommendation = '60% bonds (AGG), 40% equities (SPY)'
-        elif risk_level == 'medium':
-            initial_recommendation = '40% bonds (AGG), 60% equities (SPY)'
-        elif risk_level == 'high':
-            initial_recommendation = '20% bonds (AGG), 80% equities (SPY)'
-        elif risk_level == 'very high':
-            initial_recommendation = '0% bonds (AGG), 100% equities (SPY)'
-    
+    if risk_level == 'none':
+        initial_recommendation = '100% bonds (AGG), 0% equities (SPY)'
+    elif risk_level == 'very low':
+        initial_recommendation = '80% bonds (AGG), 20% equities (SPY)'
+    elif risk_level == 'low':
+        initial_recommendation = '60% bonds (AGG), 40% equities (SPY)'
+    elif risk_level == 'medium':
+        initial_recommendation = '40% bonds (AGG), 60% equities (SPY)'
+    elif risk_level == 'high':
+        initial_recommendation = '20% bonds (AGG), 80% equities (SPY)'
+    elif risk_level == 'very high':
+        initial_recommendation = '0% bonds (AGG), 100% equities (SPY)'
+            
     ### YOUR FINAL INVESTMENT RECOMMENDATION CODE ENDS HERE ###
 
     # Return a message with the initial recommendation based on the risk level.
