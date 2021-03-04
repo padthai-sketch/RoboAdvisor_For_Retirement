@@ -1,6 +1,6 @@
-# Robo Advisor for Retirement Plans (Assignment)
+# Robo Advisor for Retirement Plans
 
-In this homework assignment, I was asked to create a bot that will recommend an investment portfolio for a retirement plan by accomplish the following main tasks:
+In this homework assignment, I was asked to create AWS Chat bot that will recommend an investment portfolio for a retirement plan. Below are the following main tasks that I need to accomplish:
 
 
 1. Initial Robo Advisor Configuration: Define an Amazon Lex bot with a single intent that establishes a conversation about the requirements to suggest an investment portfolio for retirement.
