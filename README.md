@@ -11,4 +11,4 @@ In this homework assignment, I was asked to create a bot that will recommend an 
 
 3. Enhance the Robo Advisor with an Amazon Lambda Function: Create an Amazon Lambda function that validates the user's input and returns the investment portfolio recommendation. This task includes testing the Amazon Lambda function and making the integration with the bot.
 
-![](https://github.com/padthai-sketch/Unit13-Challenge_RetirementRoboAdvisor/blob/main/Screen%20Recording%20.mov)
+![](https://github.com/padthai-sketch/Unit13-Challenge_RetirementRoboAdvisor/blob/main/Screen%20Recording%20.mov?raw=true)
